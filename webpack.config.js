@@ -1,13 +1,14 @@
 const HTMLPlugin = require("html-webpack-plugin");
+const path = require("path");
 
 module.exports = {
   entry: ["@babel/polyfill", "./src/index.js"],
   output: {
-    path: __dirname + "/dist",
+    path: path.resolve(__dirname + "dist"),
     filename: "bundle.js",
   },
   devServer: {
-    contentBase: __dirname + "/dist",
+    contentBase: path.resolve(__dirname + "dist"),
     historyApiFallback: true,
   },
   plugins: [
@@ -17,7 +18,7 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: [".js"],
+    extensions: [".js", ".css"],
   },
   module: {
     rules: [
