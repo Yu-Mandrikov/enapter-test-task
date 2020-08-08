@@ -50,19 +50,22 @@ export class Form {
 
   showErrorMessage(input) {
     this.deleteErrorMessage(input);
-    const message = `<span class="input-error">${
-      errorMessages[input.name] || "Input error. Please check again."
-    } <span class="tooltip-wrapper"><i class="fas fa-info-circle"></i>  <div class="tooltip-content">
-    ${errorTooltips[input.name]}
-  </div></span>
-</span>
-`;
     input.classList.add("invalid");
-    input.nextSibling.nextSibling.innerHTML = message;
+    input.nextSibling.nextSibling.innerHTML = constructErrorMessage(input);
   }
 
   deleteErrorMessage($control) {
     $control.classList.remove("invalid");
     $control.nextSibling.nextSibling.innerHTML = "";
   }
+}
+
+function constructErrorMessage({ name }) {
+  return `<span class="input-error">${
+    errorMessages[name] || "Input error. Please check again."
+  }&nbsp;<span class="tooltip-wrapper"><i class="fas fa-info-circle"></i><div class="tooltip-content">
+    ${errorTooltips[name]}
+  </div></span>
+</span>
+`;
 }
