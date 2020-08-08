@@ -2,74 +2,63 @@ import { errorMessages } from "../../utils/errorMessages";
 import { errorTooltips } from "../../utils/errorTooltip";
 
 export class Form {
-  constructor(form, submitBtn, controls) {
+  constructor(form, submitBtn, inputs) {
     this.form = form;
-    this.controls = controls;
+    this.inputs = inputs;
 
-    this.$submitBtn = submitBtn;
-    this.$submitBtn.disabled = true;
+    this.submitBtn = submitBtn;
+    this.submitBtn.disabled = true;
 
-    this.isInputsValid = {}; // Activate register button if every item in object's values is true (it's equivalent to valid form)
-    Object.keys(this.controls).forEach((control) => {
-      this.isInputsValid = {
-        ...this.isInputsValid,
-        [control]: false,
-      };
-    });
+    this.areInputsValid = Object.keys(this.inputs).reduce(
+      (isInputsValid, inputName) => ({ ...isInputsValid, [inputName]: false }),
+      {}
+    );
   }
 
   clearForm() {
-    Object.keys(this.controls).forEach((control) => {
-      this.form[control].value = "";
-    });
+    this.form.reset();
   }
 
   getInputsValues() {
-    const value = {};
-    Object.keys(this.controls).forEach((control) => {
-      value[control] = this.form[control].value;
-    });
-    return value;
+    return Object.keys(this.inputs).reduce(
+      (data, inputName) => ({
+        ...data,
+        [inputName]: this.form[inputName].value,
+      }),
+      {}
+    );
   }
 
-  // checks active input separately from others on every key press
-  isValid(control = null) {
-    this.isFormValid = true;
-    const validators = this.controls[control];
-    let errorMessage = "";
-    let isValid = true;
+  isValid(inputName) {
+    const validators = this.inputs[inputName];
 
-    validators.forEach((validator) => {
-      isValid = validator(this.form[control].value) && isValid;
-      errorMessage = errorMessages[validator];
-    });
-
-    this.isFormValid = this.isFormValid && isValid;
+    const isValid = validators.reduce((isValid, validator) => {
+      return validator(this.form[inputName].value) && isValid;
+    }, true);
 
     isValid
-      ? this.deleteErrorMessage(this.form[control])
-      : this.showErrorMessage(this.form[control]);
+      ? this.deleteErrorMessage(this.form[inputName])
+      : this.showErrorMessage(this.form[inputName]);
 
-    this.isInputsValid[control] = this.isFormValid;
-    this.$submitBtn.disabled = !Object.values(this.isInputsValid).every(
+    this.areInputsValid[inputName] = isValid;
+    this.submitBtn.disabled = !Object.values(this.areInputsValid).every(
       (value) => value
     );
 
-    return this.isFormValid;
+    return isValid;
   }
 
-  // renders span under input element: <span>{Error message} {error tooltip}</span>
-  showErrorMessage($control) {
-    this.deleteErrorMessage($control);
+  showErrorMessage(input) {
+    this.deleteErrorMessage(input);
     const message = `<span class="input-error">${
-      errorMessages[$control.name] || "Error"
+      errorMessages[input.name] || "Input error. Please check again."
     } <span class="tooltip-wrapper"><i class="fas fa-info-circle"></i>  <div class="tooltip-content">
-    ${errorTooltips[$control.name]}
+    ${errorTooltips[input.name]}
   </div></span>
 </span>
 `;
-    $control.classList.add("invalid");
-    $control.nextSibling.nextSibling.innerHTML = message;
+    input.classList.add("invalid");
+    input.nextSibling.nextSibling.innerHTML = message;
   }
 
   deleteErrorMessage($control) {

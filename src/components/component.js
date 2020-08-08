@@ -4,7 +4,5 @@ export class Component {
     this.init();
   }
 
-  init() {
-    return;
-  }
+  init() {}
 }
