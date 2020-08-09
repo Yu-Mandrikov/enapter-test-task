@@ -111,22 +111,6 @@ body {
     color: #e0e0e0;
 }
 
-@media screen and (max-width: 500px) {
-    .header {
-        flex-direction: column;
-        padding: 10px 10px 10px 10px;
-        justify-content: space-around;
-    }
-
-    .header .contacts {
-        display: block;
-    }
-
-    .header .contacts li {
-        padding-left: 0;
-    }
-}
-
 .content {
     background-color: #605e5c;
     max-width: 500px;
@@ -152,25 +136,27 @@ body {
 
 .form h3 {
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .form__social {
     padding: 0;
+    margin: 10px 0;
     height: 6vh;
 }
 
 .form__social ul {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     list-style: none;
-    margin: 0 60px 10px 60px;
+    margin: 10px auto;
     padding-inline-start: 0;
     font-size: 30px;
 }
 
 .form__social ul li {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .form__social ul li:hover {
@@ -298,7 +284,6 @@ body {
     transition: 1s;
 }
 
-
 @media screen and (max-width: 500px) {
     .header {
         flex-direction: column;
@@ -314,18 +299,24 @@ body {
         padding-left: 0;
     }
 
-    .form__reg--mock {
-        margin: 20px;
-        font-weight: lighter;
-    }
-
-    .form__reg--submit {
-        margin: 20px;
-        display: flex;
-        flex-direction: column-reverse;
+    .form__social {
+        display: block;
+        padding: 0;
+        margin: 10px 0;
+        flex-direction: column;
+        height: auto;
         justify-content: space-around;
-        align-items: center;
     }
 
+    .form__social ul {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 100px;
+    }
 
+    .form__social ul li {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
 }
